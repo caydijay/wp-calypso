@@ -3,6 +3,7 @@
  */
 import { connect } from 'react-redux';
 import { localize } from 'i18n-calypso';
+import { throttle } from 'lodash';
 import React from 'react';
 import debugFactory from 'debug';
 
@@ -16,7 +17,7 @@ import {
 import { isSitePreviewable } from 'state/sites/selectors';
 import addQueryArgs from 'lib/route/add-query-args';
 import { setLayoutFocus } from 'state/ui/layout-focus/actions';
-import { isMobile } from 'lib/viewport';
+import { isWithinBreakpoint } from 'lib/viewport';
 
 import Button from 'components/button';
 import DocumentHead from 'components/data/document-head';
@@ -37,7 +38,6 @@ class PreviewMain extends React.Component {
 
 	componentWillMount() {
 		this.updateUrl();
-		this._isMobile = isMobile();
 	}
 
 	updateUrl() {
@@ -107,7 +107,7 @@ class PreviewMain extends React.Component {
 			<Main className="preview">
 				<DocumentHead title={ translate( 'Site Preview' ) } />
 				<WebPreviewContent
-					showClose={ this._isMobile }
+					showClose={ isWithinBreakpoint( '<660px' ) }
 					onClose={ this.focusSidebar }
 					previewUrl={ this.state.previewUrl }
 					externalUrl={ site.URL }
