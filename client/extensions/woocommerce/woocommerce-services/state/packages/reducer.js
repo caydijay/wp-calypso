@@ -25,6 +25,7 @@ import {
 
 export const initialState = {
 	modalErrors: {},
+	pristine: true,
 };
 
 const isNullOrEmpty = ( value ) => null === value || '' === _.trim( value );

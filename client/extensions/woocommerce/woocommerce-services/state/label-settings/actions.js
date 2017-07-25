@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import * as api from '../../api';
-import { getLabelSettingsForm } from './selectors';
+import { getLabelSettingsForm, getLabelSettingsFormData } from './selectors';
 
 export const INIT_FORM = 'INIT_FORM';
 
@@ -58,8 +58,11 @@ export const fetchSettings = ( siteId ) => ( dispatch, getState ) => {
 
 export const submit = ( siteId, onSaveSuccess, onSaveFailure ) => ( dispatch, getState ) => {
 	dispatch( setFormMetaProperty( 'isSaving', true ) );
-	api.post( siteId, api.url.accountSettings(), getState().form.data )
+	api.post( siteId, api.url.accountSettings(), getLabelSettingsFormData( getState() ) )
 		.then( onSaveSuccess )
 		.catch( onSaveFailure )
-		.then( () => dispatch( setFormMetaProperty( 'isSaving', false ) ) );
+		.then( () => {
+			dispatch( setFormMetaProperty( 'isSaving', false ) );
+			dispatch( setFormMetaProperty( 'pristine', true ) );
+		} );
 };
